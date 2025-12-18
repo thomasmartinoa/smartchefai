@@ -11,6 +11,7 @@ import '../features/grocery/grocery_list_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/scan/scan_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
+import '../features/dietary_preferences/dietary_preferences_screen.dart';
 
 /// App Router Configuration using GoRouter
 final GoRouter appRouter = GoRouter(
@@ -49,6 +50,13 @@ final GoRouter appRouter = GoRouter(
       path: '/profile',
       name: 'profile',
       builder: (context, state) => const ProfileScreen(),
+    ),
+
+    // Dietary Preferences
+    GoRoute(
+      path: '/dietary-preferences',
+      name: 'dietary-preferences',
+      builder: (context, state) => const DietaryPreferencesScreen(),
     ),
 
     // Recipe Detail
@@ -125,6 +133,7 @@ class AppRoutes {
   static const String favorites = 'favorites';
   static const String grocery = 'grocery';
   static const String profile = 'profile';
+  static const String dietaryPreferences = 'dietary-preferences';
   static const String recipeDetail = 'recipe-detail';
   static const String scan = 'scan';
   static const String voiceSearch = 'voice-search';
