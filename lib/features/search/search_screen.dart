@@ -179,7 +179,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const SmartChefBottomNav(currentIndex: 1),
     );
   }
 

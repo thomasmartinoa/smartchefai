@@ -55,12 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       child: Scaffold(
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            await context.read<RecipeProvider>().loadRecipes();
-          },
-          child: CustomScrollView(
+        body: SafeArea(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await context.read<RecipeProvider>().loadRecipes();
+            },
+            child: CustomScrollView(
             slivers: [
               // Header
               SliverToBoxAdapter(
@@ -116,8 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: const SmartChefBottomNav(currentIndex: 0),
+        ),
       ),
     );
   }

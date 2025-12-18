@@ -243,7 +243,6 @@ class ProfileScreen extends StatelessWidget {
           const Gap.xxxl(),
         ],
       ),
-      bottomNavigationBar: const SmartChefBottomNav(currentIndex: 4),
     );
   }
 }
