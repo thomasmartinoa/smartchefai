@@ -448,11 +448,11 @@ class GroceryListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Toggle item checked state
+  /// Toggle item checked state (immutable pattern)
   void toggleItem(String id) {
     final index = _items.indexWhere((item) => item.name == id);
     if (index != -1) {
-      _items[index].checked = !_items[index].checked;
+      _items[index] = _items[index].copyWith(checked: !_items[index].checked);
       _saveLocalItems();
       notifyListeners();
     }

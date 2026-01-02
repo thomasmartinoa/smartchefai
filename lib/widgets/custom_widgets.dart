@@ -9,12 +9,12 @@ class SmartChefAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
 
   const SmartChefAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.actions,
     this.onBackPressed,
     this.showBackButton = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class SmartChefAppBar extends StatelessWidget implements PreferredSizeWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10)],
       ),
       child: SafeArea(
         child: Padding(
@@ -67,12 +67,12 @@ class RecipeCard extends StatelessWidget {
   final VoidCallback? onFavoriteTap;
 
   const RecipeCard({
-    Key? key,
+    super.key,
     required this.recipe,
     required this.onTap,
     this.isFavorite = false,
     this.onFavoriteTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class RecipeCard extends StatelessWidget {
                     ),
                   ),
                   child: Center(
-                    child: Icon(Icons.restaurant_menu, size: 60, color: Colors.white.withOpacity(0.3)),
+                    child: Icon(Icons.restaurant_menu, size: 60, color: Colors.white.withValues(alpha: 0.3)),
                   ),
                 ),
                 // Favorite Button
@@ -111,7 +111,7 @@ class RecipeCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8)],
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 8)],
                       ),
                       padding: const EdgeInsets.all(8),
                       child: Icon(
@@ -129,7 +129,7 @@ class RecipeCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _getDifficultyColor(recipe.difficulty).withOpacity(0.9),
+                      color: _getDifficultyColor(recipe.difficulty).withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -218,7 +218,7 @@ class RecipeCard extends StatelessWidget {
 class NutritionInfoWidget extends StatelessWidget {
   final Nutrition nutrition;
 
-  const NutritionInfoWidget({Key? key, required this.nutrition}) : super(key: key);
+  const NutritionInfoWidget({super.key, required this.nutrition});
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +257,7 @@ class NutritionInfoWidget extends StatelessWidget {
           height: 60,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: color.withOpacity(0.2),
+            color: color.withValues(alpha: 0.2),
           ),
           child: Center(
             child: Text(
@@ -290,13 +290,13 @@ class GroceryItemTile extends StatelessWidget {
   final VoidCallback? onDelete;
 
   const GroceryItemTile({
-    Key? key,
+    super.key,
     required this.itemName,
     required this.category,
     required this.isChecked,
     required this.onToggle,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -348,13 +348,13 @@ class SmartChefSearchBar extends StatelessWidget {
   final Function(String)? onChanged;
 
   const SmartChefSearchBar({
-    Key? key,
+    super.key,
     required this.controller,
     this.hintText = 'Search recipes...',
     this.onVoicePressed,
     this.onCameraPressed,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -363,7 +363,7 @@ class SmartChefSearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 8)],
       ),
       child: TextField(
         controller: controller,
@@ -399,7 +399,7 @@ class SmartChefSearchBar extends StatelessWidget {
 class LoadingState extends StatelessWidget {
   final String? message;
 
-  const LoadingState({Key? key, this.message}) : super(key: key);
+  const LoadingState({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -429,10 +429,10 @@ class ErrorState extends StatelessWidget {
   final VoidCallback? onRetry;
 
   const ErrorState({
-    Key? key,
+    super.key,
     required this.message,
     this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -473,12 +473,12 @@ class EmptyState extends StatelessWidget {
   final VoidCallback? onAction;
 
   const EmptyState({
-    Key? key,
+    super.key,
     required this.message,
     this.icon = Icons.inbox,
     this.actionLabel,
     this.onAction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

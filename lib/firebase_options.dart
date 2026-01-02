@@ -1,3 +1,5 @@
+// ignore_for_file: dangling_library_doc_comments
+
 /// Firebase configuration options
 /// 
 /// ⚠️ IMPORTANT: This is a placeholder file!

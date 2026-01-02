@@ -1,6 +1,10 @@
 /// Data models for SmartChef AI
+/// 
+/// All models follow immutable patterns with copyWith methods
+/// for efficient state management.
 library;
 
+/// Recipe model representing a cooking recipe
 class Recipe {
   final String id;
   final String name;
@@ -24,7 +28,7 @@ class Recipe {
   // Aliases for compatibility
   List<String> get instructions => steps;
 
-  Recipe({
+  const Recipe({
     required this.id,
     required this.name,
     required this.ingredients,
@@ -40,6 +44,41 @@ class Recipe {
     this.similarityScore,
     this.rating,
   });
+  
+  /// Create a copy with modified fields
+  Recipe copyWith({
+    String? id,
+    String? name,
+    List<String>? ingredients,
+    List<String>? steps,
+    String? prepTime,
+    String? cookTime,
+    String? difficulty,
+    String? cuisine,
+    List<String>? dietaryTags,
+    Nutrition? nutrition,
+    int? servings,
+    String? imageUrl,
+    double? similarityScore,
+    double? rating,
+  }) {
+    return Recipe(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      ingredients: ingredients ?? this.ingredients,
+      steps: steps ?? this.steps,
+      prepTime: prepTime ?? this.prepTime,
+      cookTime: cookTime ?? this.cookTime,
+      difficulty: difficulty ?? this.difficulty,
+      cuisine: cuisine ?? this.cuisine,
+      dietaryTags: dietaryTags ?? this.dietaryTags,
+      nutrition: nutrition ?? this.nutrition,
+      servings: servings ?? this.servings,
+      imageUrl: imageUrl ?? this.imageUrl,
+      similarityScore: similarityScore ?? this.similarityScore,
+      rating: rating ?? this.rating,
+    );
+  }
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
@@ -109,6 +148,7 @@ class Recipe {
   };
 }
 
+/// Nutrition information for a recipe
 class Nutrition {
   final int calories;
   final String protein;
@@ -116,13 +156,30 @@ class Nutrition {
   final String fat;
   final String fiber;
 
-  Nutrition({
+  const Nutrition({
     required this.calories,
     required this.protein,
     required this.carbs,
     required this.fat,
     required this.fiber,
   });
+  
+  /// Create a copy with modified fields
+  Nutrition copyWith({
+    int? calories,
+    String? protein,
+    String? carbs,
+    String? fat,
+    String? fiber,
+  }) {
+    return Nutrition(
+      calories: calories ?? this.calories,
+      protein: protein ?? this.protein,
+      carbs: carbs ?? this.carbs,
+      fat: fat ?? this.fat,
+      fiber: fiber ?? this.fiber,
+    );
+  }
 
   factory Nutrition.fromJson(Map<String, dynamic> json) {
     return Nutrition(
@@ -143,6 +200,7 @@ class Nutrition {
   };
 }
 
+/// User model for app users
 class User {
   final String id;
   final String name;
@@ -152,7 +210,7 @@ class User {
   final List<String> favoriteRecipes;
   final List<Map<String, dynamic>> searchHistory;
 
-  User({
+  const User({
     required this.id,
     required this.name,
     required this.email,
@@ -161,6 +219,27 @@ class User {
     required this.favoriteRecipes,
     required this.searchHistory,
   });
+  
+  /// Create a copy with modified fields
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    List<String>? dietaryPreferences,
+    List<String>? allergies,
+    List<String>? favoriteRecipes,
+    List<Map<String, dynamic>>? searchHistory,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      dietaryPreferences: dietaryPreferences ?? this.dietaryPreferences,
+      allergies: allergies ?? this.allergies,
+      favoriteRecipes: favoriteRecipes ?? this.favoriteRecipes,
+      searchHistory: searchHistory ?? this.searchHistory,
+    );
+  }
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -184,11 +263,12 @@ class User {
   };
 }
 
+/// Search history entry
 class SearchHistory {
   final String query;
   final DateTime timestamp;
 
-  SearchHistory({required this.query, required this.timestamp});
+  const SearchHistory({required this.query, required this.timestamp});
 
   factory SearchHistory.fromJson(Map<String, dynamic> json) {
     return SearchHistory(
@@ -198,6 +278,7 @@ class SearchHistory {
   }
 }
 
+/// Grocery list model
 class GroceryList {
   final String id;
   final String userId;
@@ -209,7 +290,7 @@ class GroceryList {
   final DateTime createdAt;
   final String status;
 
-  GroceryList({
+  const GroceryList({
     required this.id,
     required this.userId,
     this.name = '',
@@ -220,6 +301,31 @@ class GroceryList {
     required this.createdAt,
     required this.status,
   });
+  
+  /// Create a copy with modified fields
+  GroceryList copyWith({
+    String? id,
+    String? userId,
+    String? name,
+    List<GroceryItem>? items,
+    Map<String, List<GroceryItem>>? byCategory,
+    int? totalItems,
+    List<String>? recipes,
+    DateTime? createdAt,
+    String? status,
+  }) {
+    return GroceryList(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      name: name ?? this.name,
+      items: items ?? this.items,
+      byCategory: byCategory ?? this.byCategory,
+      totalItems: totalItems ?? this.totalItems,
+      recipes: recipes ?? this.recipes,
+      createdAt: createdAt ?? this.createdAt,
+      status: status ?? this.status,
+    );
+  }
 
   factory GroceryList.fromJson(Map<String, dynamic> json) {
     final itemsList = (json['items'] as List?)?.map((e) => GroceryItem.fromJson(e)).toList() ?? [];
@@ -252,15 +358,16 @@ class GroceryList {
   };
 }
 
+/// Grocery item in a list
 class GroceryItem {
   final String name;
   final double quantity;
   final String unit;
   final String category;
-  bool checked;
+  final bool checked;
   final List<String> recipes;
 
-  GroceryItem({
+  const GroceryItem({
     required this.name,
     required this.quantity,
     required this.unit,
@@ -268,6 +375,25 @@ class GroceryItem {
     this.checked = false,
     required this.recipes,
   });
+  
+  /// Create a copy with modified fields (immutable toggle)
+  GroceryItem copyWith({
+    String? name,
+    double? quantity,
+    String? unit,
+    String? category,
+    bool? checked,
+    List<String>? recipes,
+  }) {
+    return GroceryItem(
+      name: name ?? this.name,
+      quantity: quantity ?? this.quantity,
+      unit: unit ?? this.unit,
+      category: category ?? this.category,
+      checked: checked ?? this.checked,
+      recipes: recipes ?? this.recipes,
+    );
+  }
 
   factory GroceryItem.fromJson(Map<String, dynamic> json) {
     return GroceryItem(
@@ -290,6 +416,7 @@ class GroceryItem {
   };
 }
 
+/// Detected ingredient from image analysis
 class DetectedIngredient {
   final String name;
   final double confidence;

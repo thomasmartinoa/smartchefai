@@ -37,6 +37,7 @@ class _ScanScreenState extends State<ScanScreen> {
         await Future.delayed(const Duration(seconds: 2));
 
         // Mock detected ingredients
+        if (!mounted) return;
         setState(() {
           _detectedIngredients = [
             'Tomatoes',
@@ -50,6 +51,7 @@ class _ScanScreenState extends State<ScanScreen> {
         });
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to pick image: $e')),
       );

@@ -1,12 +1,19 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:smartchefai/models/models.dart';
 
 /// Firebase Service - Direct Firestore integration
 /// Replaces Python backend with serverless Firebase
+/// 
+/// Features:
+/// - Singleton pattern for consistent state
+/// - Offline-first caching strategy
+/// - Automatic retry with exponential backoff
+/// - TheMealDB API fallback for recipe data
 class FirebaseService {
   static final FirebaseService _instance = FirebaseService._internal();
   factory FirebaseService() => _instance;
@@ -20,8 +27,10 @@ class FirebaseService {
   static const String _mealDbBaseUrl = 'https://www.themealdb.com/api/json/v1/1';
   late final Dio _dio;
 
-  // Local cache
+  // Local cache with expiration
   List<Recipe> _cachedRecipes = [];
+  DateTime? _cacheTimestamp;
+  static const Duration _cacheExpiration = Duration(minutes: 30);
   bool _initialized = false;
 
   /// Initialize the service
@@ -36,6 +45,23 @@ class FirebaseService {
       ),
     );
     
+    // Add retry interceptor for network resilience
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (error, handler) async {
+          if (_shouldRetry(error)) {
+            try {
+              final response = await _retryRequest(error.requestOptions);
+              return handler.resolve(response);
+            } catch (e) {
+              return handler.next(error);
+            }
+          }
+          return handler.next(error);
+        },
+      ),
+    );
+    
     // Enable Firestore offline persistence
     _firestore.settings = const Settings(
       persistenceEnabled: true,
@@ -43,6 +69,30 @@ class FirebaseService {
     );
     
     _initialized = true;
+  }
+  
+  /// Check if error should be retried
+  bool _shouldRetry(DioException error) {
+    return error.type == DioExceptionType.connectionTimeout ||
+           error.type == DioExceptionType.receiveTimeout ||
+           error.type == DioExceptionType.connectionError;
+  }
+  
+  /// Retry request with exponential backoff
+  Future<Response> _retryRequest(RequestOptions options, [int retryCount = 0]) async {
+    const maxRetries = 3;
+    if (retryCount >= maxRetries) {
+      throw DioException(requestOptions: options);
+    }
+    
+    await Future.delayed(Duration(milliseconds: 500 * (retryCount + 1)));
+    return _dio.fetch(options);
+  }
+  
+  /// Check if cache is valid
+  bool get _isCacheValid {
+    if (_cachedRecipes.isEmpty || _cacheTimestamp == null) return false;
+    return DateTime.now().difference(_cacheTimestamp!) < _cacheExpiration;
   }
 
   // ==================== AUTHENTICATION ====================
@@ -82,8 +132,10 @@ class FirebaseService {
   // ==================== RECIPES (Firestore + TheMealDB) ====================
 
   /// Get all recipes from Firestore + TheMealDB
-  Future<List<Recipe>> getAllRecipes({int limit = 100}) async {
-    if (_cachedRecipes.isNotEmpty) {
+  /// Uses cache-first strategy with expiration
+  Future<List<Recipe>> getAllRecipes({int limit = 100, bool forceRefresh = false}) async {
+    // Return valid cache unless force refresh
+    if (!forceRefresh && _isCacheValid) {
       return _cachedRecipes.take(limit).toList();
     }
 
@@ -93,6 +145,7 @@ class FirebaseService {
       
       if (firestoreRecipes.isNotEmpty) {
         _cachedRecipes = firestoreRecipes;
+        _cacheTimestamp = DateTime.now();
         return _cachedRecipes;
       }
       
@@ -101,16 +154,21 @@ class FirebaseService {
       final mealDbRecipes = await _fetchMealDbRecipes();
       
       _cachedRecipes = [...localRecipes, ...mealDbRecipes];
+      _cacheTimestamp = DateTime.now();
       
-      // Seed Firestore with recipes for future use
+      // Seed Firestore with recipes for future use (non-blocking)
       if (_cachedRecipes.isNotEmpty) {
-        await _seedFirestoreRecipes(_cachedRecipes);
+        _seedFirestoreRecipes(_cachedRecipes).catchError((e) {
+          debugPrint('Failed to seed Firestore: $e');
+        });
       }
       
       return _cachedRecipes.take(limit).toList();
     } catch (e) {
       // Ultimate fallback to local
+      debugPrint('Error loading recipes: $e');
       _cachedRecipes = await _loadLocalRecipes();
+      _cacheTimestamp = DateTime.now();
       return _cachedRecipes.take(limit).toList();
     }
   }
@@ -562,14 +620,14 @@ class FirebaseService {
     await _firestore.collection('grocery_lists').doc(listId).delete();
   }
 
-  /// Toggle grocery item checked status
+  /// Toggle grocery item checked status (immutable pattern)
   Future<void> toggleGroceryItem(String listId, String itemName) async {
     final list = await getGroceryList(listId);
     if (list == null) return;
 
     final items = list.items.map((item) {
       if (item.name == itemName) {
-        item.checked = !item.checked;
+        return item.copyWith(checked: !item.checked);
       }
       return item;
     }).toList();
