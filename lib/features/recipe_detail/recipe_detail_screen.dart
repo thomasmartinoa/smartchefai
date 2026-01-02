@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,10 +10,7 @@ import '../../models/models.dart';
 class RecipeDetailScreen extends StatefulWidget {
   final Recipe recipe;
 
-  const RecipeDetailScreen({
-    super.key,
-    required this.recipe,
-  });
+  const RecipeDetailScreen({super.key, required this.recipe});
 
   @override
   State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
@@ -161,7 +157,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen>
                             vertical: AppSpacing.xs,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.accentYellow.withValues(alpha: 0.2),
+                            color: AppColors.accentYellow.withValues(
+                              alpha: 0.2,
+                            ),
                             borderRadius: AppSpacing.borderRadiusSm,
                           ),
                           child: Row(
@@ -242,7 +240,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen>
                         ),
                       ),
                     ],
-                  ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
+                  ),
 
                   const Gap.lg(),
                 ],
@@ -291,7 +289,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen>
 
   void _addToGroceryList(BuildContext context, Recipe recipe) {
     final groceryProvider = context.read<GroceryListProvider>();
-    
+
     // Create grocery items from ingredients
     for (final ingredient in recipe.ingredients) {
       groceryProvider.addItem(
@@ -308,7 +306,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen>
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${recipe.ingredients.length} ingredients added to grocery list'),
+        content: Text(
+          '${recipe.ingredients.length} ingredients added to grocery list',
+        ),
         action: SnackBarAction(
           label: 'View',
           onPressed: () => Navigator.pushNamed(context, '/grocery'),
@@ -383,10 +383,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return Container(
-      color: backgroundColor,
-      child: tabBar,
-    );
+    return Container(color: backgroundColor, child: tabBar);
   }
 
   @override
@@ -423,7 +420,9 @@ class _IngredientsTab extends StatelessWidget {
             Text('Servings:', style: textTheme.bodyLarge),
             const HGap.md(),
             IconButton(
-              onPressed: servings > 1 ? () => onServingsChanged(servings - 1) : null,
+              onPressed: servings > 1
+                  ? () => onServingsChanged(servings - 1)
+                  : null,
               icon: Container(
                 padding: AppSpacing.paddingXs,
                 decoration: BoxDecoration(
@@ -450,10 +449,7 @@ class _IngredientsTab extends StatelessWidget {
                   color: colorScheme.primaryContainer,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.add,
-                  color: colorScheme.onPrimaryContainer,
-                ),
+                child: Icon(Icons.add, color: colorScheme.onPrimaryContainer),
               ),
             ),
           ],
@@ -484,7 +480,7 @@ class _IngredientsTab extends StatelessWidget {
               ),
             ),
             title: Text(ingredient),
-          ).animate(delay: (50 * index).ms).fadeIn().slideX(begin: -0.1, end: 0);
+          );
         }),
 
         const Gap.xl(),
@@ -552,18 +548,17 @@ class _InstructionsTab extends StatelessWidget {
                 child: Container(
                   padding: AppSpacing.paddingMd,
                   decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                    color: colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.5,
+                    ),
                     borderRadius: AppSpacing.borderRadiusMd,
                   ),
-                  child: Text(
-                    step,
-                    style: textTheme.bodyLarge,
-                  ),
+                  child: Text(step, style: textTheme.bodyLarge),
                 ),
               ),
             ],
           ),
-        ).animate(delay: (100 * index).ms).fadeIn().slideX(begin: 0.1, end: 0);
+        );
       },
     );
   }
@@ -638,6 +633,6 @@ class _NutritionTab extends StatelessWidget {
           ),
         ],
       ),
-    ).animate().fadeIn(delay: 100.ms);
+    );
   }
 }

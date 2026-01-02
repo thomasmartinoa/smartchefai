@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../app/theme/theme.dart';
 import '../../shared/widgets/widgets.dart';
@@ -118,7 +117,7 @@ class _ScanScreenState extends State<ScanScreen> {
                   ),
                 ],
               ),
-            ).animate().fadeIn().slideY(begin: -0.1, end: 0),
+            ),
 
             const Gap.xl(),
 
@@ -270,10 +269,7 @@ class _ScanScreenState extends State<ScanScreen> {
                         _detectedIngredients.removeAt(index);
                       });
                     },
-                  ).animate(delay: (50 * index).ms).fadeIn().scale(
-                        begin: const Offset(0.8, 0.8),
-                        end: const Offset(1, 1),
-                      );
+                  );
                 }).toList(),
               ),
 
@@ -380,6 +376,6 @@ class _ScanOption extends StatelessWidget {
           ],
         ),
       ),
-    ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.1, end: 0);
+    );
   }
 }

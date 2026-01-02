@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../app/theme/theme.dart';
 
@@ -169,12 +168,7 @@ class _CenterButton extends StatelessWidget {
           color: Colors.white,
           size: 28,
         ),
-      ).animate(onPlay: (c) => c.repeat(reverse: true)).scaleXY(
-            begin: 1,
-            end: 1.05,
-            duration: 2000.ms,
-            curve: Curves.easeInOut,
-          ),
+      ),
     );
   }
 }

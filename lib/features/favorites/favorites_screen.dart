@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../app/theme/theme.dart';
 import '../../shared/widgets/widgets.dart';
@@ -80,10 +79,7 @@ class FavoritesScreen extends StatelessWidget {
                 onFavoriteTap: () {
                   provider.toggleFavorite(recipe.id);
                 },
-              ).animate(delay: (50 * index).ms).fadeIn().scale(
-                    begin: const Offset(0.9, 0.9),
-                    end: const Offset(1, 1),
-                  );
+              );
             },
           );
         },

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "363654315902",
+    "project_id": "smartchefai-344c5",
+    "storage_bucket": "smartchefai-344c5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363654315902:android:cd6584fce56de1ad37fd2f",
+        "android_client_info": {
+          "package_name": "com.example.smartchefai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363654315902-mhg7gma6g4trlsuhcfr4l6g88kjopbf3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smartchefai",
+            "certificate_hash": "51aeb64f6390464111e88f2443b136a26e4bd3a9"
+          }
+        },
+        {
+          "client_id": "363654315902-83t2o7hqg3du2tcnmn4e7if50m0pvemc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfSksNPgjVi_hAhU2hzP9TjG2RqxaDzM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363654315902-83t2o7hqg3du2tcnmn4e7if50m0pvemc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "363654315902-r0d0taj8jaanbipj59eelfphbq0qeohl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.smartchefai"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app/theme/theme.dart';
 
@@ -117,15 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               style: const TextStyle(fontSize: 72),
                             ),
                           ),
-                        )
-                            .animate(key: ValueKey(index))
-                            .fadeIn(duration: 400.ms)
-                            .scale(
-                              begin: const Offset(0.5, 0.5),
-                              end: const Offset(1, 1),
-                              duration: 400.ms,
-                              curve: Curves.elasticOut,
-                            ),
+                        ),
 
                         const Gap.xxxl(),
 
@@ -137,10 +128,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             color: page.color,
                           ),
                           textAlign: TextAlign.center,
-                        )
-                            .animate(key: ValueKey('${index}_title'))
-                            .fadeIn(delay: 200.ms)
-                            .slideY(begin: 0.2, end: 0),
+                        ),
 
                         const Gap.lg(),
 
@@ -152,10 +140,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             height: 1.6,
                           ),
                           textAlign: TextAlign.center,
-                        )
-                            .animate(key: ValueKey('${index}_subtitle'))
-                            .fadeIn(delay: 300.ms)
-                            .slideY(begin: 0.2, end: 0),
+                        ),
                       ],
                     ),
                   );

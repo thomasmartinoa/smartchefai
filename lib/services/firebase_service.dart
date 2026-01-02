@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartchefai/models/models.dart';
 
 /// Firebase Service - Direct Firestore integration
@@ -22,6 +23,7 @@ class FirebaseService {
   // Firebase instances
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final firebase_auth.FirebaseAuth _auth = firebase_auth.FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // TheMealDB API for recipe data (FREE backup source)
   static const String _mealDbBaseUrl = 'https://www.themealdb.com/api/json/v1/1';
@@ -99,31 +101,143 @@ class FirebaseService {
 
   /// Get current user
   firebase_auth.User? get currentUser => _auth.currentUser;
+  
+  /// Check if user is signed in
+  bool get isSignedIn => _auth.currentUser != null;
 
   /// Sign in anonymously (for guest users)
   Future<firebase_auth.UserCredential> signInAnonymously() async {
-    return await _auth.signInAnonymously();
+    try {
+      return await _auth.signInAnonymously();
+    } catch (e) {
+      debugPrint('Error signing in anonymously: $e');
+      rethrow;
+    }
   }
 
   /// Sign in with email/password
   Future<firebase_auth.UserCredential> signInWithEmail(String email, String password) async {
-    return await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      return await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    }
   }
 
   /// Register with email/password
-  Future<firebase_auth.UserCredential> registerWithEmail(String email, String password) async {
-    return await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+  Future<firebase_auth.UserCredential> registerWithEmail(
+    String email,
+    String password,
+    String name,
+  ) async {
+    try {
+      final credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      
+      // Update display name
+      await credential.user?.updateDisplayName(name);
+      
+      // Create user profile in Firestore
+      await createUserProfile(
+        name: name,
+        email: email,
+      );
+      
+      return credential;
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    }
+  }
+  
+  /// Sign in with Google
+  Future<firebase_auth.UserCredential> signInWithGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      
+      if (googleUser == null) {
+        throw Exception('Google sign-in was cancelled');
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // Create a new credential
+      final credential = firebase_auth.GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential
+      final userCredential = await _auth.signInWithCredential(credential);
+      
+      // Create user profile if first time
+      if (userCredential.additionalUserInfo?.isNewUser ?? false) {
+        await createUserProfile(
+          name: googleUser.displayName ?? 'User',
+          email: googleUser.email,
+        );
+      }
+      
+      return userCredential;
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    } catch (e) {
+      debugPrint('Error signing in with Google: $e');
+      rethrow;
+    }
+  }
+  
+  /// Send password reset email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    }
+  }
+  
+  /// Handle Firebase Auth exceptions with user-friendly messages
+  String _handleAuthException(firebase_auth.FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No user found with this email address.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'email-already-in-use':
+        return 'An account already exists with this email.';
+      case 'invalid-email':
+        return 'The email address is not valid.';
+      case 'weak-password':
+        return 'Password is too weak. Use at least 6 characters.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'operation-not-allowed':
+        return 'This sign-in method is not enabled.';
+      default:
+        return 'Authentication error: ${e.message}';
+    }
   }
 
   /// Sign out
   Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await Future.wait([
+        _auth.signOut(),
+        _googleSignIn.signOut(),
+      ]);
+      clearCache();
+    } catch (e) {
+      debugPrint('Error signing out: $e');
+      rethrow;
+    }
   }
 
   /// Auth state stream

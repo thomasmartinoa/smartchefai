@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../../app/theme/theme.dart';
 
 /// Modern Search Bar with voice and camera buttons
@@ -280,12 +279,7 @@ class ShimmerPlaceholder extends StatelessWidget {
         color: colorScheme.surfaceContainerHighest,
         borderRadius: borderRadius ?? AppSpacing.borderRadiusMd,
       ),
-    )
-        .animate(onPlay: (controller) => controller.repeat())
-        .shimmer(
-          duration: 1500.ms,
-          color: colorScheme.surface.withValues(alpha: 0.5),
-        );
+    );
   }
 }
 
@@ -358,7 +352,7 @@ class EmptyState extends StatelessWidget {
           ],
         ),
       ),
-    ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, end: 0);
+    );
   }
 }
 

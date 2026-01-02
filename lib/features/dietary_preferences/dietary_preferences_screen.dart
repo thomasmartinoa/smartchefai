@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../app/theme/theme.dart';
 import '../../shared/widgets/widgets.dart';
@@ -107,7 +106,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
             style: textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
-          ).animate().fadeIn().slideY(begin: -0.2, end: 0),
+          ),
           
           const Gap.sm(),
           
@@ -116,7 +115,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
             style: textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
-          ).animate(delay: 100.ms).fadeIn(),
+          ),
           
           const Gap.lg(),
           
@@ -139,9 +138,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
                 },
                 selectedColor: AppColors.primaryOrange.withValues(alpha: 0.2),
                 checkmarkColor: AppColors.primaryOrange,
-              ).animate(delay: (50 * _availablePreferences.indexOf(pref)).ms)
-                  .fadeIn()
-                  .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1));
+              );
             }).toList(),
           ),
           
@@ -153,7 +150,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
             style: textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
-          ).animate(delay: 200.ms).fadeIn().slideY(begin: -0.2, end: 0),
+          ),
           
           const Gap.sm(),
           
@@ -162,7 +159,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
             style: textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
-          ).animate(delay: 300.ms).fadeIn(),
+          ),
           
           const Gap.lg(),
           
@@ -185,9 +182,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
                 },
                 selectedColor: Colors.red.withValues(alpha: 0.2),
                 checkmarkColor: Colors.red,
-              ).animate(delay: (50 * _commonAllergies.indexOf(allergy)).ms)
-                  .fadeIn()
-                  .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1));
+              );
             }).toList(),
           ),
           
@@ -198,7 +193,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
             text: 'Save Preferences',
             gradient: AppColors.primaryGradient,
             onPressed: _savePreferences,
-          ).animate(delay: 400.ms).fadeIn().slideY(begin: 0.2, end: 0),
+          ),
           
           const Gap.xl(),
         ],

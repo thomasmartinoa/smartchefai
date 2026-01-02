@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../app/theme/theme.dart';
 
@@ -127,20 +126,27 @@ class RecipeCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const Gap.sm(),
-                      // Meta info
+                      // Meta info - Fixed overflow by making it wrap properly
                       Row(
                         children: [
-                          _MetaChip(
-                            icon: Icons.schedule,
-                            label: cookTime,
-                          ),
-                          const HGap.sm(),
-                          _MetaChip(
-                            icon: Icons.signal_cellular_alt,
-                            label: difficulty,
+                          Flexible(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _MetaChip(
+                                  icon: Icons.schedule,
+                                  label: cookTime,
+                                ),
+                                const HGap.sm(),
+                                _MetaChip(
+                                  icon: Icons.signal_cellular_alt,
+                                  label: difficulty,
+                                ),
+                              ],
+                            ),
                           ),
                           if (rating != null) ...[
-                            const Spacer(),
+                            const HGap.sm(),
                             Icon(
                               Icons.star_rounded,
                               size: 16,
@@ -165,12 +171,7 @@ class RecipeCard extends StatelessWidget {
           ),
         ),
       ),
-    ).animate().fadeIn(duration: 300.ms).scale(
-          begin: const Offset(0.95, 0.95),
-          end: const Offset(1, 1),
-          duration: 300.ms,
-          curve: Curves.easeOut,
-        );
+    );
   }
 }
 

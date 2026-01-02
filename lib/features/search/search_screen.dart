@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../app/theme/theme.dart';
@@ -142,9 +141,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Icon(
                     Icons.mic,
                     color: colorScheme.primary,
-                  )
-                      .animate(onPlay: (c) => c.repeat(reverse: true))
-                      .scale(begin: const Offset(1, 1), end: const Offset(1.2, 1.2)),
+                  ),
                   const HGap.sm(),
                   Text(
                     'Listening... Say ingredient or recipe name',

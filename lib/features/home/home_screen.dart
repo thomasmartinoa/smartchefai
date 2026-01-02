@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../app/theme/theme.dart';
@@ -78,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onCameraTap: () => context.push('/scan'),
                     hintText: 'What would you like to cook today?',
                   ),
-                ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
+                ),
               ),
 
               const SliverToBoxAdapter(child: Gap.lg()),
@@ -170,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    ).animate().fadeIn().slideX(begin: -0.1, end: 0);
+    );
   }
 
   String _getGreeting() {
@@ -212,10 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   context.read<RecipeProvider>().searchRecipes(categories[index].name);
                   context.push('/search');
                 },
-              ).animate(delay: (100 * index).ms).fadeIn().scale(
-                    begin: const Offset(0.8, 0.8),
-                    end: const Offset(1, 1),
-                  );
+              );
             },
           ),
         ),

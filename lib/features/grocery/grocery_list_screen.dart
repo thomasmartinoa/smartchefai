@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../app/theme/theme.dart';
 import '../../shared/widgets/widgets.dart';
@@ -155,9 +154,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                         ),
                       ),
                       const Gap.sm(),
-                      ...uncheckedItems.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final item = entry.value;
+                      ...uncheckedItems.map((item) {
                         return GroceryItemTile(
                           name: item.name,
                           quantity: '${item.quantity} ${item.unit}'.trim(),
@@ -168,10 +165,7 @@ class _GroceryListScreenState extends State<GroceryListScreen> {
                           onDelete: () {
                             provider.removeItem(item.name);
                           },
-                        ).animate(delay: (30 * index).ms).fadeIn().slideX(
-                              begin: -0.1,
-                              end: 0,
-                            );
+                        );
                       }),
                     ],
 

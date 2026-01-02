@@ -348,13 +348,108 @@ class UserProvider extends ChangeNotifier {
   }
 
   /// Logout
-  void logout() async {
+  Future<void> logout() async {
     try {
       await _firebaseService.signOut();
     } catch (e) {
       // Continue
     }
     _appUser = null;
+    notifyListeners();
+  }
+
+  /// Sign in with email and password
+  Future<void> signInWithEmail(String email, String password) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final userCredential = await _firebaseService.signInWithEmail(email, password);
+      if (userCredential.user != null) {
+        _appUser = await _firebaseService.getUserProfile();
+      }
+    } catch (e) {
+      _error = e.toString();
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Sign up with email and password
+  Future<void> signUpWithEmail(String email, String password, String name) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final userCredential = await _firebaseService.registerWithEmail(
+        email,
+        password,
+        name,
+      );
+      if (userCredential.user != null) {
+        _appUser = await _firebaseService.getUserProfile();
+      }
+    } catch (e) {
+      _error = e.toString();
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Sign in with Google
+  Future<void> signInWithGoogle() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final userCredential = await _firebaseService.signInWithGoogle();
+      if (userCredential.user != null) {
+        _appUser = await _firebaseService.getUserProfile();
+      }
+    } catch (e) {
+      _error = e.toString();
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Send password reset email
+  Future<void> sendPasswordReset(String email) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _firebaseService.sendPasswordResetEmail(email);
+    } catch (e) {
+      _error = e.toString();
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Sign in as guest
+  Future<void> signInAsGuest() async {
+    _appUser = AppUser(
+      id: 'guest',
+      name: 'Guest User',
+      email: 'guest@smartchefai.com',
+      dietaryPreferences: [],
+      allergies: [],
+      favoriteRecipes: [],
+      searchHistory: [],
+    );
     notifyListeners();
   }
 

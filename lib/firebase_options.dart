@@ -46,22 +46,25 @@ class DefaultFirebaseOptions {
 
   // ⚠️ PLACEHOLDER VALUES - Replace with your actual Firebase config
   // Run: flutterfire configure --project=YOUR_PROJECT_ID
-  
+
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'YOUR_WEB_API_KEY',
-    appId: 'YOUR_WEB_APP_ID',
-    messagingSenderId: 'YOUR_SENDER_ID',
-    projectId: 'YOUR_PROJECT_ID',
-    authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-    storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+    apiKey: 'AIzaSyCVlaM6qdTU6G0cZkGe1Dc7c3mr2uvkk1E',
+    appId: '1:363654315902:web:f4277ec6cabb731b37fd2f',
+    messagingSenderId: '363654315902',
+    projectId: 'smartchefai-344c5',
+    authDomain: 'smartchefai-344c5.firebaseapp.com',
+    storageBucket: 'smartchefai-344c5.firebasestorage.app',
+    measurementId: 'G-Q75R5P80JN',
   );
 
+  
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_ANDROID_API_KEY',
-    appId: 'YOUR_ANDROID_APP_ID',
-    messagingSenderId: 'YOUR_SENDER_ID',
-    projectId: 'YOUR_PROJECT_ID',
-    storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+    apiKey: 'AIzaSyCfSksNPgjVi_hAhU2hzP9TjG2RqxaDzM8',
+    appId: '1:363654315902:android:cd6584fce56de1ad37fd2f',
+    messagingSenderId: '363654315902',
+    projectId: 'smartchefai-344c5',
+    storageBucket: 'smartchefai-344c5.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

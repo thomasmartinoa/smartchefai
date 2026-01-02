@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/models.dart';
+import '../services/firebase_service.dart';
 
 // Feature Screens
 import '../features/home/home_screen.dart';
@@ -12,6 +13,10 @@ import '../features/profile/profile_screen.dart';
 import '../features/scan/scan_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/dietary_preferences/dietary_preferences_screen.dart';
+import '../features/auth/get_started_screen.dart';
+import '../features/auth/login_screen.dart';
+import '../features/auth/signup_screen.dart';
+import '../features/auth/forgot_password_screen.dart';
 
 // Navigation Key for nested navigation
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -20,9 +25,58 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(d
 /// App Router Configuration using GoRouter with ShellRoute
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/get-started',
   debugLogDiagnostics: true,
+  redirect: (context, state) {
+    final firebaseService = FirebaseService();
+    final isSignedIn = firebaseService.isSignedIn;
+    final isGoingToAuth = state.uri.path.startsWith('/get-started') ||
+        state.uri.path.startsWith('/login') ||
+        state.uri.path.startsWith('/signup') ||
+        state.uri.path.startsWith('/forgot-password');
+
+    // Redirect to get-started if not signed in and not already going to auth screens
+    if (!isSignedIn && !isGoingToAuth) {
+      return '/get-started';
+    }
+
+    // Redirect to home if signed in and trying to access auth screens
+    if (isSignedIn && isGoingToAuth) {
+      return '/';
+    }
+
+    return null;
+  },
   routes: [
+    // Auth Routes (outside shell)
+    GoRoute(
+      path: '/get-started',
+      name: 'get-started',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const GetStartedScreen(),
+    ),
+
+    GoRoute(
+      path: '/login',
+      name: 'login',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const LoginScreen(),
+    ),
+
+    GoRoute(
+      path: '/signup',
+      name: 'signup',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const SignupScreen(),
+    ),
+
+    GoRoute(
+      path: '/forgot-password',
+      name: 'forgot-password',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
+
     // Onboarding (outside shell)
     GoRoute(
       path: '/onboarding',

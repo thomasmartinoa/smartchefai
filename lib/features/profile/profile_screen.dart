@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../app/theme/theme.dart';
@@ -55,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ).animate().fadeIn().slideY(begin: -0.1, end: 0),
+          ),
 
           const Gap.xl(),
 
@@ -89,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ).animate(delay: 100.ms).fadeIn().slideY(begin: 0.1, end: 0),
+          ),
 
           const Gap.xl(),
 
@@ -123,7 +122,7 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {},
               ),
             ],
-          ).animate(delay: 200.ms).fadeIn().slideX(begin: 0.1, end: 0),
+          ),
 
           const Gap.lg(),
 
@@ -165,7 +164,7 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {},
               ),
             ],
-          ).animate(delay: 300.ms).fadeIn().slideX(begin: 0.1, end: 0),
+          ),
 
           const Gap.lg(),
 
@@ -201,7 +200,7 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {},
               ),
             ],
-          ).animate(delay: 400.ms).fadeIn().slideX(begin: 0.1, end: 0),
+          ),
 
           const Gap.xl(),
 
@@ -238,7 +237,7 @@ class ProfileScreen extends StatelessWidget {
               side: BorderSide(color: colorScheme.error),
               minimumSize: const Size(double.infinity, 48),
             ),
-          ).animate(delay: 500.ms).fadeIn(),
+          ),
 
           const Gap.xxxl(),
         ],
