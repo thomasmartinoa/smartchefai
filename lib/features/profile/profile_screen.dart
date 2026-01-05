@@ -8,6 +8,18 @@ import '../../providers/app_providers.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  String _getInitials(String? name) {
+    if (name == null || name.isEmpty) return 'SC';
+    
+    final parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+    } else if (parts.isNotEmpty) {
+      return parts[0].substring(0, parts[0].length >= 2 ? 2 : 1).toUpperCase();
+    }
+    return 'SC';
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -25,10 +37,15 @@ class ProfileScreen extends StatelessWidget {
           Center(
             child: Column(
               children: [
-                const ProfileAvatar(
-                  size: 100,
-                  initials: 'SC',
-                  showEditButton: true,
+                Consumer<UserProvider>(
+                  builder: (context, provider, child) {
+                    final user = provider.currentUser;
+                    return ProfileAvatar(
+                      size: 100,
+                      initials: _getInitials(user?.name),
+                      showEditButton: true,
+                    );
+                  },
                 ),
                 const Gap.md(),
                 Consumer<UserProvider>(
