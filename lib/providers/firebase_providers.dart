@@ -253,28 +253,26 @@ class UserProvider extends ChangeNotifier {
     _initUser();
   }
 
-  /// Initialize user (sign in anonymously if needed)
+  /// Initialize user (load existing user if authenticated)
   Future<void> _initUser() async {
     try {
-      // Check if already signed in
-      if (_firebaseService.currentUser == null) {
-        // Sign in anonymously for guest access
-        await _firebaseService.signInAnonymously();
-      }
-      
-      // Load user profile
-      _appUser = await _firebaseService.getUserProfile();
-      
-      // Create profile if doesn't exist
-      if (_appUser == null && _firebaseService.currentUser != null) {
-        await _firebaseService.createUserProfile(
-          name: 'Guest User',
-          email: _firebaseService.currentUser?.email ?? '',
-        );
+      // Only load user profile if already signed in
+      if (_firebaseService.currentUser != null) {
         _appUser = await _firebaseService.getUserProfile();
+        
+        // Create profile if doesn't exist (for existing Firebase auth users)
+        if (_appUser == null) {
+          final user = _firebaseService.currentUser!;
+          await _firebaseService.createUserProfile(
+            name: user.displayName ?? 'User',
+            email: user.email ?? '',
+          );
+          _appUser = await _firebaseService.getUserProfile();
+        }
       }
+      // If no user signed in, leave _appUser as null
     } catch (e) {
-      // Continue without Firebase auth
+      // Continue without user data
       _error = e.toString();
     }
     notifyListeners();
@@ -368,6 +366,15 @@ class UserProvider extends ChangeNotifier {
       final userCredential = await _firebaseService.signInWithEmail(email, password);
       if (userCredential.user != null) {
         _appUser = await _firebaseService.getUserProfile();
+        
+        // Create profile if it doesn't exist (shouldn't happen but handle gracefully)
+        if (_appUser == null) {
+          await _firebaseService.createUserProfile(
+            name: userCredential.user!.displayName ?? 'User',
+            email: userCredential.user!.email ?? email,
+          );
+          _appUser = await _firebaseService.getUserProfile();
+        }
       }
     } catch (e) {
       _error = e.toString();
@@ -391,7 +398,17 @@ class UserProvider extends ChangeNotifier {
         name,
       );
       if (userCredential.user != null) {
+        // registerWithEmail already creates the profile, just load it
         _appUser = await _firebaseService.getUserProfile();
+        
+        // Ensure profile was created (shouldn't be null but handle gracefully)
+        if (_appUser == null) {
+          await _firebaseService.createUserProfile(
+            name: name,
+            email: email,
+          );
+          _appUser = await _firebaseService.getUserProfile();
+        }
       }
     } catch (e) {
       _error = e.toString();
@@ -412,6 +429,15 @@ class UserProvider extends ChangeNotifier {
       final userCredential = await _firebaseService.signInWithGoogle();
       if (userCredential.user != null) {
         _appUser = await _firebaseService.getUserProfile();
+        
+        // Create profile if it doesn't exist (shouldn't happen as signInWithGoogle creates it)
+        if (_appUser == null) {
+          await _firebaseService.createUserProfile(
+            name: userCredential.user!.displayName ?? 'User',
+            email: userCredential.user!.email ?? '',
+          );
+          _appUser = await _firebaseService.getUserProfile();
+        }
       }
     } catch (e) {
       _error = e.toString();

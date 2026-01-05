@@ -41,10 +41,25 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = e.toString();
+        
+        // Make error messages more user-friendly
+        if (errorMessage.contains('PERMISSION_DENIED') || errorMessage.contains('Firestore')) {
+          errorMessage = 'Database connection error. Please check your internet connection or contact support.';
+        } else if (errorMessage.contains('network')) {
+          errorMessage = 'Network error. Please check your internet connection.';
+        }
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(e.toString()),
+            content: Text(errorMessage),
             backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
           ),
         );
       }
@@ -67,10 +82,27 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = e.toString();
+        
+        // Make error messages more user-friendly
+        if (errorMessage.contains('Google sign-in was cancelled')) {
+          errorMessage = 'Google sign-in was cancelled.';
+        } else if (errorMessage.contains('PERMISSION_DENIED') || errorMessage.contains('Firestore')) {
+          errorMessage = 'Database connection error. Please try again later.';
+        } else if (errorMessage.contains('network')) {
+          errorMessage = 'Network error. Please check your internet connection.';
+        }
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(e.toString()),
+            content: Text(errorMessage),
             backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
           ),
         );
       }
