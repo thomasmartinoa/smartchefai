@@ -1,7 +1,7 @@
 # SmartChef AI - Complete Project Documentation
 
 > **AI-Powered Recipe Recommender with Smart Ingredient Detection**  
-> Version: 2.0.0 | Architecture: Firebase + Flutter | Last Updated: 2025
+> Version: 2.1.0 | Architecture: Firebase + Flutter | Last Updated: January 2026
 
 ---
 
@@ -39,12 +39,14 @@
 
 ### Key Features
 
+- � **User Authentication**: Secure login/signup with email & password, anonymous mode
 - 🔍 **Smart Recipe Search**: Text and voice-powered search with instant results
 - 📸 **Ingredient Detection**: AI-powered camera scan to identify ingredients
 - 💝 **Favorites Management**: Save and organize favorite recipes
 - 🛒 **Smart Grocery Lists**: Auto-generate shopping lists from recipes
 - 📊 **Nutrition Tracking**: Detailed nutritional information for every recipe
 - 👤 **User Profiles**: Personalized experience with dietary preferences
+- 🎯 **Dietary Preferences**: Custom filters for allergies and diet types
 - 🌙 **Dark Mode**: Full theme customization support
 - 🎨 **Modern UI**: Material 3 design with smooth animations
 - 🔥 **Firebase Integration**: Serverless backend with real-time sync
@@ -250,7 +252,10 @@ flutter run
 #### Authentication
 1. Go to **Build > Authentication**
 2. Click "Get started"
-3. Enable **Anonymous** sign-in method
+3. Enable the following sign-in methods:
+   - **Email/Password**: For standard authentication
+   - **Anonymous**: For guest access
+   - **Google** (Optional): For social login
 
 #### Cloud Firestore
 1. Go to **Build > Firestore Database**
@@ -302,27 +307,35 @@ This generates `lib/firebase_options.dart` with your configuration.
 
 ## ✨ Features
 
-### 1. Home Screen
+### 1. Authentication Flow
+- **Get Started Screen**: Welcome page with app overview and call-to-action
+- **Login Screen**: Email/password authentication with "Remember Me" option
+- **Signup Screen**: New user registration with email validation
+- **Forgot Password**: Password reset via email link
+- **Anonymous Mode**: Quick access without account creation
+- Firebase Auth integration with secure session management
+
+### 2. Home Screen
 - Personalized greeting based on time of day
 - Quick category access (Chicken, Beef, Vegetarian, etc.)
 - Featured recipes carousel
 - Popular recipes grid
 - Quick actions: Search, Scan, Grocery
 
-### 2. Smart Search
+### 3. Smart Search
 - Text input with instant results
 - Voice search using speech_to_text
 - Category filter chips
 - Recent searches (stored in Firestore)
 - Ingredient-based search
 
-### 3. Ingredient Scanner
+### 4. Ingredient Scanner
 - Camera capture for ingredient photos
 - Gallery selection
 - Mock AI detection (placeholder for ML Kit)
 - Recipe suggestions based on detected ingredients
 
-### 4. Recipe Detail
+### 5. Recipe Detail
 - Hero image with gradient overlay
 - Ingredient list with servings adjuster
 - Step-by-step instructions
@@ -330,25 +343,31 @@ This generates `lib/firebase_options.dart` with your configuration.
 - Add to favorites
 - Add ingredients to grocery list
 
-### 5. Favorites
+### 6. Favorites
 - Grid view of saved recipes
 - Local + Cloud sync
 - Offline access to favorites
 - Quick remove functionality
 
-### 6. Grocery List
+### 7. Grocery List
 - Manual item entry
 - Auto-add from recipes
 - Check/uncheck items (immutable pattern)
 - Clear completed items
 - Category grouping
 
-### 7. Profile
-- User info display
-- Dietary preferences management
-- Allergy settings
+### 8. Profile & Settings
+- User info display (name, email, join date)
+- Account management (update profile, change password)
 - App settings (dark mode, notifications)
 - Logout functionality
+
+### 9. Dietary Preferences
+- Dietary restrictions (Vegetarian, Vegan, Gluten-Free, etc.)
+- Allergy management (Nuts, Dairy, Shellfish, etc.)
+- Cuisine preferences
+- Calorie goals and macro tracking
+- Recipe filtering based on preferences
 
 ---
 
@@ -789,4 +808,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-*Documentation Version: 2.0.0 | Last Updated: 2025*
+*Documentation Version: 2.1.0 | Last Updated: January 2026*
